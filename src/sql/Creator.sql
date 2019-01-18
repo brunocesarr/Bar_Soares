@@ -4,28 +4,22 @@ USE Bar_Soares;
 
 
 --
--- Table structure for table `endereco`
---
-CREATE TYPE endereco AS (
-  `rua` VARCHAR(30) NOT NULL,
-  `numero` VARCHAR(10) NOT NULL,
-  `complemento` VARCHAR(10) NULL, 
-  `bairro` VARCHAR(30) NOT NULL,
-  `cidade` VARCHAR(30) NOT NULL,
-  `estado` VARCHAR(30) NOT NULL, 
-);
-
---
 -- Table structure for table `cliente`
 --
 CREATE TABLE `cliente` (
   `codigo` INT(11) NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(30) NOT NULL,
-  `cpf` VARCHAR(11) NOT NULL,
-  `endereco` endereco NOT NULL,
+  `cpf` VARCHAR(14) NOT NULL,
+  `telefone` VARCHAR(17) NOT NULL,
+  `rua` VARCHAR(30) NOT NULL,
+  `numero` INT(11) NOT NULL,
+  `complemento` VARCHAR(10) NULL, 
+  `bairro` VARCHAR(30) NOT NULL,
+  `cidade` VARCHAR(30) NOT NULL,
+  `estado` VARCHAR(30) NOT NULL,
   `data_cadastro` DATE NOT NULL,
   PRIMARY KEY (`codigo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8_unicode;
+) ENGINE=InnoDB;
 
 --
 -- Table structure for table `fornecedor`
@@ -33,12 +27,17 @@ CREATE TABLE `cliente` (
 CREATE TABLE `fornecedor` (
   `codigo` INT(11) NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(30) NOT NULL,
-  `cnpj` VARCHAR(14) NOT NULL,
-  `telefone` VARCHAR(11) NOT NULL,
-  `endereco` endereco NOT NULL,
+  `cnpj` VARCHAR(18) NOT NULL,
+  `telefone` VARCHAR(17) NOT NULL,
+  `rua` VARCHAR(30) NOT NULL,
+  `numero` INT(11)) NOT NULL,
+  `complemento` VARCHAR(10) NULL, 
+  `bairro` VARCHAR(30) NOT NULL,
+  `cidade` VARCHAR(30) NOT NULL,
+  `estado` VARCHAR(30) NOT NULL,
   `data_cadastro` DATE NOT NULL,
-  PRIMARY KEY (`codigo`),
-) ENGINE=InnoDB DEFAULT CHARSET=utf8_unicode;
+  PRIMARY KEY (`codigo`)
+) ENGINE=InnoDB;
 
 --
 -- Table structure for table `produto`
@@ -49,8 +48,8 @@ CREATE TABLE `produto` (
   `valor_compra` DOUBLE NOT NULL,
   `valor_venda` DOUBLE NOT NULL,
   `quant_estoque` INT NOT NULL,
-  PRIMARY KEY (`codigo`),
-) ENGINE=InnoDB DEFAULT CHARSET=utf8_unicode;
+  PRIMARY KEY (`codigo`)
+) ENGINE=InnoDB;
 
 --
 -- Table structure for table `forn_prod`
@@ -61,7 +60,7 @@ CREATE TABLE `forn_prod` (
   PRIMARY KEY (`cod_forn`, `cod_prod`),
   FOREIGN KEY (`cod_forn`) REFERENCES `fornecedor` (`codigo`),
   FOREIGN KEY (`cod_prod`) REFERENCES `produto` (`codigo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8_unicode;
+) ENGINE=InnoDB;
 
 --
 -- Table structure for table `pedido`
@@ -73,7 +72,7 @@ CREATE TABLE `pedido` (
   `valor_total` DOUBLE NOT NULL,
   PRIMARY KEY (`codigo`),
   FOREIGN KEY (`cod_cliente`) REFERENCES `cliente` (`codigo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8_unicode;
+) ENGINE=InnoDB;
 
 --
 -- Table structure for table `item_pedido`
@@ -86,7 +85,7 @@ CREATE TABLE `item_pedido` (
   PRIMARY KEY (`codigo`),
   FOREIGN KEY (`cod_produto`) REFERENCES `produto` (`codigo`),
   FOREIGN KEY (`cod_pedido`) REFERENCES `pedido` (`codigo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8_unicode;
+) ENGINE=InnoDB;
 
 --
 -- Table structure for table `dividas`
@@ -97,17 +96,17 @@ CREATE TABLE `dividas` (
   `valor` DOUBLE NOT NULL,
   PRIMARY KEY (`codigo`),
   FOREIGN KEY (`cod_pedido`) REFERENCES `pedido` (`codigo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8_unicode;
+) ENGINE=InnoDB;
 
 --
 -- Table structure for table `div_cliente`
 --
 CREATE TABLE `div_cliente` (
-  `cod_cliente` INT(11) NOT NULL AUTO_INCREMENT,
-  `cod_divida` INT(11) NOT NULL,
-  PRIMARY KEY (`cod_cliente`, `cod_divida`),
-  FOREIGN KEY (`cod_cliente`) REFERENCES `cliente` (`codigo`),
-  FOREIGN KEY (`cod_divida`) REFERENCES `divida` (`codigo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8_unicode;
+  `cod_cliente` INT NOT NULL,
+  `cod_divida` INT NOT NULL,
+  CONSTRAINT `pk_div_cliente` PRIMARY KEY (`cod_cliente`, `cod_divida`),
+  CONSTRAINT `fk_cod_cliente` FOREIGN KEY (`cod_cliente`) REFERENCES `cliente` (`codigo`),
+  CONSTRAINT `fk_cod_divida` FOREIGN KEY (`cod_divida`) REFERENCES `divida` (`codigo`)
+) ENGINE=InnoDB;
 
 	
